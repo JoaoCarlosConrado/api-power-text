@@ -1,0 +1,93 @@
+fastify.register(tmodelget, {prefix: '/tmodel'})//buscar modelos de texto do usuario
+fastify.register(tmodelpost, {prefix: '/tmodel'})//criar modelo de texto
+fastify.register(tmodelput, {prefix: '/tmodel'})//criar modelo de texto
+fastify.register(tmodeldelete, {prefix: '/tmodel'})//criar modelo de texto
+fastify.register(tmodelshare, {prefix: '/tmodel/share'})//criar modelo de texto
+
+fastify.register(userget, {prefix: '/user'})//criar modelo de texto
+fastify.register(userdelete, {prefix: '/user'})//criar modelo de texto
+fastify.register(userput, {prefix: '/user'})//criar modelo de texto
+
+//Rotas documentadas
+
+/auth/login
+Formato para recebimento de variáveis:
+x-www-form-urlencoded
+
+keys:
+mail = email de usuario
+name = nome de usuario
+pass = senha de usuario
+
+retorno:
+-Caso usuário e senha estejam corretos:
+{auth: true, token: token, message: "sucess"}
+token é o JWT que carrega as informações do usuário
+
+-Caso usuario e/ou senha sejam inválidos, mesmo caso para usuário não existente
+{auth: false, token: null, message: "Invalid user or password"}
+
+/auth/logout
+
+-retorna token null para ser colocado no header
+{auth: false, token: null}
+
+/auth/signup
+Formato para recebimento de variáveis:
+x-www-form-urlencoded
+
+keys:
+mail = email de usuario
+name = nome de usuario
+pass = senha de usuario
+
+retorno:
+-Caso o usuário tenha sido criado com sucesso
+{signup: true, token: token}
+token é o JWT que carrega as informações do usuário
+
+-Caso o usuário não tenha sido criado
+caso de erro não criado
+
+/mailconfirm/:mail/:code
+Formato de envio:
+Parâmetros de url
+
+keys:
+mail = email do usuario
+code = codigo de verificação de email
+
+retorno:
+-Caso o email seja verificado com sucesso
+{confirm: true}
+
+-Caso email não seja verificado com sucesso
+{confirm: false}
+
+/verify/name/:name
+Formato de envio:
+Parâmetro de url
+
+keys:
+name = nome de usuario
+
+retorno:
+-Caso nome de usuario esteja disponivel
+{status: "avaible"}
+
+-Caso nome de usuario esteja indisponivel
+{status: "unavaible"}
+
+/verify/mail/:mail
+Formato de envio:
+Parâmetro de url
+
+keys:
+mail = email de usuario
+
+retorno:
+-Caso email de usuario esteja disponivel
+{status: "avaible"}
+
+-Caso email de usuario esteja indisponivel
+{status: "unavaible"}
