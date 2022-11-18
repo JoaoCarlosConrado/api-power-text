@@ -12,14 +12,19 @@ async function login(server: FastifyInstance){
         const userpass = data.pass
     
         let query = "SELECT * from users WHERE name='"+username+"'"
-        const userobj: any = await sequelize.query(query, { type: QueryTypes.SELECT })
+        const userobj: any = await sequelize.query(query, { type: QueryTypes.SELECT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
         const user = userobj[0]
         console.log(user)
+        if(userobj.length === 0){
+            res.send({auth: false, token: null, message: "Invalid user or password"})
+        }
         if(userpass === user.password){
             let token = createJWT(user.id, user.name, user.mail)
             res.send({auth: true, token: token, message: "sucess"})
         }else{
-            res.send([{auth: false, token: null, message: "Invalid user or password"}])
+            res.send({auth: false, token: null, message: "Invalid user or password"})
         }
     })
 }

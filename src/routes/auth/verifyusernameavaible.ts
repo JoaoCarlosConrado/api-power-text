@@ -8,7 +8,9 @@ async function verifyusername(server: FastifyInstance){
         const param: any = req.params
         const username = param.username
         let query = "SELECT name from users WHERE name='"+username+"'"
-        const user: any = await sequelize.query(query, { type: QueryTypes.SELECT })
+        const user: any = await sequelize.query(query, { type: QueryTypes.SELECT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
         if(user.length === 0){
             res.send({status: "avaible"})
         }

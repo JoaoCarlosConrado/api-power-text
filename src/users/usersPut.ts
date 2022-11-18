@@ -12,7 +12,9 @@ async function userput(server: FastifyInstance){
         const id = verifyjwt(req.headers)
 
         let query = "UPDATE users SET '"+param+"'='"+value+"' WHERE id='"+id+"'"
-        const user = await sequelize.query(query, { type: QueryTypes.UPDATE })
+        const user = await sequelize.query(query, { type: QueryTypes.UPDATE }).catch((error: any) => {
+            res.send({error: "mysql error"})
+        })
 
         res.send({user})
     })

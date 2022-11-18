@@ -46,7 +46,7 @@ async function start() {
     
     
 
-    await fastify.listen({port: process.env.PORT, host: '0.0.0.0'});
+    await fastify.listen({port: Number(process.env.PORT), /*host: '0.0.0.0'*/});
 }
 
 start()

@@ -19,7 +19,9 @@ async function signup(server: FastifyInstance){
 
         
         let query = "INSERT INTO users (id, name, mail, password, mailcode) values ('"+userid+"', '"+username+"', '"+usermail+"','"+password+"', '"+mailcode+"')"
-        await sequelize.query(query, { type: QueryTypes.INSERT })
+        await sequelize.query(query, { type: QueryTypes.INSERT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
     
         let token = createJWT(userid, username, usermail)
         res.send({signup: true, token: token})

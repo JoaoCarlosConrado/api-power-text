@@ -9,8 +9,10 @@ async function userget(server: FastifyInstance){
     
         const id = verifyjwt(req.headers)
 
-        let query = "SELECT name, mail, image from users WHERE id='"+id+"'"
-        const user = await sequelize.query(query, { type: QueryTypes.SELECT })
+        let query = "SELECT name, mail, image, isConfirmed from users WHERE id='"+id+"'"
+        let user = await sequelize.query(query, { type: QueryTypes.SELECT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
 
         res.send({user})
     })

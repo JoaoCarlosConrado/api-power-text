@@ -5,7 +5,7 @@ const { QueryTypes } = require('sequelize');
 import sequelize from '../BDconnection/connect'
 import verifyjwt from '../functions/verifyjwt'
 async function tmodelpost(server: FastifyInstance){
-    server.post('/', async (req, reply)=> {
+    server.post('/', async (req, res)=> {
 
         const data: any = await req.body
         const header: any = req.headers
@@ -13,12 +13,16 @@ async function tmodelpost(server: FastifyInstance){
         const userid = verifyjwt(header) 
 
         let query = "INSERT INTO text_models (id, title, content, textfont) VALUES ('"+id+"', '"+data.title+"','"+data.content+"', '"+data.textfont+"')"
-        await sequelize.query(query, { type: QueryTypes.INSERT })
+        await sequelize.query(query, { type: QueryTypes.INSERT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
         
         query = "INSERT INTO user_text_model (id, id_user, id_text_models) VALUES ('"+String(cuid())+"', '"+userid+"','"+id+"')"
-        await sequelize.query(query, { type: QueryTypes.INSERT })
+        await sequelize.query(query, { type: QueryTypes.INSERT }).catch(error => {
+            res.send({error: "mysql error"})
+        })
         
-        reply.send({status: "success"})
+        res.send({status: "success"})
     })
 }
 

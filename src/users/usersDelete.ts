@@ -10,7 +10,9 @@ async function userdelete(server: FastifyInstance){
         const id = verifyjwt(req.headers)
 
         let query = "DELETE from users WHERE id='"+id+"'"
-        const user = await sequelize.query(query, { type: QueryTypes.DELETE })
+        const user = await sequelize.query(query, { type: QueryTypes.DELETE }).catch((error: any) => {
+            res.send({error: "mysql error"})
+        })
 
         res.send({user})
     })
